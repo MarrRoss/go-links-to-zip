@@ -9,7 +9,7 @@ type TaskFile struct {
 	ID        ID
 	Name      string
 	Link      string
-	Status    string //TODO: сделать enum
+	Status    string
 	Error     string
 	CreatedAt time.Time
 	UpdatedAt time.Time

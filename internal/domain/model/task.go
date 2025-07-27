@@ -7,7 +7,7 @@ import (
 
 type Task struct {
 	ID          ID
-	Status      string //TODO: сделать enum
+	Status      string
 	Files       []*TaskFile
 	ArchivePath *string
 	CreatedAt   time.Time
@@ -40,6 +40,9 @@ func (task *Task) SetArchivePath(path string) error {
 		return exception.ErrInvalidArchivePath
 	}
 	task.ArchivePath = &path
+	task.Status = StatusFinished
 	task.UpdatedAt = time.Now()
+	timeNow := time.Now()
+	task.EndedAt = &timeNow
 	return nil
 }
