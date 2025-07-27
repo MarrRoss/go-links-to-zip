@@ -16,7 +16,6 @@ type TaskFile struct {
 	EndedAt   *time.Time
 }
 
-// TODO: добавить имя файла?
 // TODO: добавить поле с ошибкой?
 
 func NewFiles(name, link string) (*TaskFile, error) {

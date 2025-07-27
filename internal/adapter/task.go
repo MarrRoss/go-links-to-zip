@@ -9,8 +9,7 @@ import (
 
 type TaskRepositoryImpl struct {
 	observer *observability.Observability
-	tasks    map[model.ID]*model.Task
-	mu       sync.RWMutex
+	tasks    sync.Map
 }
 
 func NewTaskRepositoryImpl(
@@ -18,7 +17,6 @@ func NewTaskRepositoryImpl(
 ) (*TaskRepositoryImpl, error) {
 	return &TaskRepositoryImpl{
 		observer: observer,
-		tasks:    make(map[model.ID]*model.Task),
 	}, nil
 }
 
@@ -26,5 +24,6 @@ func (repo *TaskRepositoryImpl) CreateTask(
 	ctx context.Context,
 	task *model.Task,
 ) error {
-
+	repo.tasks.Store(task.ID, task)
+	return nil
 }
