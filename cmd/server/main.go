@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/MarrRoss/go-links-to-zip/config"
+	"github.com/MarrRoss/go-links-to-zip/internal/adapter"
+	handler2 "github.com/MarrRoss/go-links-to-zip/internal/application/handler"
 	"github.com/MarrRoss/go-links-to-zip/internal/observability"
 	"github.com/MarrRoss/go-links-to-zip/internal/presentation/http/handler"
 	"github.com/MarrRoss/go-links-to-zip/pkg/logging"
@@ -19,7 +21,16 @@ func main() {
 	cfg := config.New()
 	logger := logging.NewZeroLogger(zerolog.TraceLevel)
 	observer := observability.New(logger)
-	zipHandler := handler.New(observer)
+	dbTask, err := adapter.NewTaskRepositoryImpl(observer)
+	if err != nil {
+		log.Fatalf("failed to connect to storage: %v", err)
+	}
+	dbFile, err := adapter.NewFileRepositoryImpl(observer)
+	if err != nil {
+		log.Fatalf("failed to connect to storage: %v", err)
+	}
+	appHandler := handler2.NewAppHandler(observer, dbFile, dbTask)
+	presentHandler := handler.NewPresentHandler(observer, appHandler)
 
 	app := fiber.New(fiber.Config{DisableStartupMessage: true})
 	app.Use(recover.New(recover.Config{EnableStackTrace: true}))
@@ -44,10 +55,10 @@ func main() {
 		},
 	}))
 
-	app.Post("/tasks", zipHandler.CreateTask)
+	app.Post("/tasks", presentHandler.CreateTask)
 
 	observer.GetLogger().Info().Msg("Starting app")
-	err := app.Listen(fmt.Sprintf(":%s", cfg.API.Port))
+	err = app.Listen(fmt.Sprintf(":%s", cfg.API.Port))
 	if err != nil {
 		log.Fatalf("failed to start server: %v", err)
 	}

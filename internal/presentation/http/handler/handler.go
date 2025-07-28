@@ -1,13 +1,21 @@
 package handler
 
-import "github.com/MarrRoss/go-links-to-zip/internal/observability"
+import (
+	"github.com/MarrRoss/go-links-to-zip/internal/application/handler"
+	"github.com/MarrRoss/go-links-to-zip/internal/observability"
+)
 
-type Handler struct {
-	observer *observability.Observability
+type PresentHandler struct {
+	observer   *observability.Observability
+	appHandler *handler.AppHandler
 }
 
-func New(
+func NewPresentHandler(
 	observer *observability.Observability,
-) *Handler {
-	return &Handler{observer: observer}
+	appHandler *handler.AppHandler,
+) *PresentHandler {
+	return &PresentHandler{
+		observer:   observer,
+		appHandler: appHandler,
+	}
 }

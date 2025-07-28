@@ -17,13 +17,13 @@ type Task struct {
 
 // по status определяется, можно ли пользовтаелю скачать архив
 
-func NewTask(files []*TaskFile) (*Task, error) {
+func NewTask() (*Task, error) {
 	id := NewID()
 	now := time.Now()
 	newTask := Task{
 		ID:          id,
 		Status:      StatusCreated,
-		Files:       files,
+		Files:       nil,
 		ArchivePath: nil,
 		CreatedAt:   now,
 		UpdatedAt:   now,

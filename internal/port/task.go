@@ -6,5 +6,7 @@ import (
 )
 
 type TaskRepository interface {
-	AddTask(ctx context.Context, task *model.Task) error
+	CreateTask(ctx context.Context, task *model.Task) error
+	CheckActiveTasksLimit(ctx context.Context) error
+	PrintAllTasks()
 }

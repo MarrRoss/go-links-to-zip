@@ -1,8 +1,8 @@
 package exception
 
 import (
+	"errors"
 	"fmt"
-	"github.com/pkg/errors"
 )
 
 var ErrGeneral = errors.New("general error")
