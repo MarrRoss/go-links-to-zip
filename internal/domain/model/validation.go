@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-func IsValidURL(link string) (bool, *url.URL) {
+func IsValidURL(link string) (bool, url.URL) {
 	parsedLink, err := url.Parse(link)
 	if err != nil || parsedLink.Path == "" {
-		return false, nil
+		return false, url.URL{}
 	}
-	return true, parsedLink
+	return true, *parsedLink
 }
 
 func IsValidExtension(link string) bool {

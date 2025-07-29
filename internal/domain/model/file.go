@@ -21,7 +21,7 @@ type TaskFile struct {
 
 // TODO: добавить поле с ошибкой?
 
-func NewFile(link string, parsedLink *url.URL) (*TaskFile, error) {
+func NewFile(link string, parsedLink url.URL) (*TaskFile, error) {
 	if link == "" {
 		return nil, exception.ErrInvalidFileLink
 	}
@@ -41,7 +41,7 @@ func NewFile(link string, parsedLink *url.URL) (*TaskFile, error) {
 	return &newFileLink, nil
 }
 
-func CreateFileName(link string, parsedLink *url.URL, id ID) string {
+func CreateFileName(link string, parsedLink url.URL, id ID) string {
 	defaultName := fmt.Sprintf("file-%s%s", id, path.Ext(link))
 	base := path.Base(parsedLink.Path)
 	if base == "/" || base == "." || base == "" {

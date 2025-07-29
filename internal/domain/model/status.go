@@ -1,8 +1,8 @@
 package model
 
 const (
-	StatusCreated  = "created"
-	StatusPending  = "pending"
-	StatusError    = "error"
-	StatusFinished = "finished"
+	StatusCreated    = "created"
+	StatusProcessing = "processing"
+	StatusError      = "error"
+	StatusFinished   = "finished"
 )

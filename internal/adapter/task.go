@@ -29,6 +29,21 @@ func (repo *TaskRepositoryImpl) CreateTask(
 	return nil
 }
 
+func (repo *TaskRepositoryImpl) GetTaskByID(
+	ctx context.Context,
+	id model.ID,
+) (*model.Task, error) {
+	value, ok := repo.tasks.Load(id)
+	if !ok {
+		return nil, fmt.Errorf("task not found by id: %v", id)
+	}
+	task, ok := value.(*model.Task)
+	if !ok {
+		return nil, fmt.Errorf("invalid type stored in tasks map for id: %v", id)
+	}
+	return task, nil
+}
+
 func (repo *TaskRepositoryImpl) CheckActiveTasksLimit(
 	ctx context.Context,
 ) error {

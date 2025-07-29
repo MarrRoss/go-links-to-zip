@@ -17,6 +17,17 @@ func (h *AppHandler) AddFilesToTask(ctx context.Context, cmd AddFilesToTaskComma
 		h.observer.Logger.Error().Msg("invalid links count")
 		return model.ID{}, exception.ErrInvalidLinksCount
 	}
+	task, err := h.taskStorage.GetTaskByID(ctx, model.UUIDtoID(cmd.TaskID)) // добавить ошибки репо
+	if err != nil {
+		h.observer.Logger.Error().Msg("failed to get task by id")
+		return model.ID{}, err
+	}
+	taskFilesCount := len(task.Files)
+	if taskFilesCount+len(cmd.FileLinks) > 3 {
+		h.observer.Logger.Error().Msg("invalid links count")
+		return model.ID{}, exception.ErrInvalidLinksCount
+	}
+
 	filesIDs := [3]model.ID{}
 	for key, value := range cmd.FileLinks {
 		id, err := h.CreateFile(ctx, value)
@@ -26,10 +37,9 @@ func (h *AppHandler) AddFilesToTask(ctx context.Context, cmd AddFilesToTaskComma
 		}
 		filesIDs[key] = id
 	}
-	}
 
-
-// проверить доступность ресурса если файлов 3
+	// сборка архива если файлов 3
+	// проверить доступность файлов по ссылкам
 	return newTask.ID, nil
 }
 

@@ -15,3 +15,7 @@ func (id ID) ToRaw() uuid.UUID {
 func (id ID) String() string {
 	return uuid.UUID(id).String()
 }
+
+func UUIDtoID(guid uuid.UUID) ID {
+	return ID(guid)
+}
